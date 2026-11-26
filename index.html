@@ -105,7 +105,6 @@ const Y=DATA.Y, M=DATA.M;
 const VIEWS={
   mad:{b:'Madrid capital',k:'mad',big:'vecinos de la provincia trabajan en Madrid capital',to:'madrid',inv:false,share:true},
   cm:{b:'Comunidad de Madrid',k:'cm',big:'vecinos de la provincia trabajan en la Comunidad de Madrid',to:'madrid',inv:false,share:true},
-  tol:{b:'Provincia de Toledo',k:'tol',big:'vecinos de la provincia trabajan en la provincia de Toledo',to:'toledo',inv:false,share:true},
   inv:{b:'De Madrid a aquí',k:'inv',big:'vecinos de la Comunidad de Madrid trabajan en la provincia',to:'madrid',inv:true,share:false}
 };
 let view='mad', yi=3, sel='034', playing=null;
@@ -149,7 +148,7 @@ function draw(){
   vEl.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===view));
   yEl.querySelectorAll('button[data-i]').forEach(b=>b.classList.toggle('on',+b.dataset.i===yi));
   let tot=0;for(const c in M)tot+=val(c,k,yi)||0;
-  const totals={mad:DATA.S[Y[yi]].mad,cm:DATA.S[Y[yi]].mad+DATA.S[Y[yi]].rcm,tol:DATA.S[Y[yi]].tol,inv:DATA.S[Y[yi]].inv};
+  const totals={mad:DATA.S[Y[yi]].mad,cm:DATA.S[Y[yi]].mad+DATA.S[Y[yi]].rcm,inv:DATA.S[Y[yi]].inv};
   count(totals[view]);
   document.getElementById('bigL').textContent=`${V.big} (${Y[yi]})`;
   const vmax=maxOver(k),smax=V.share?shareMax(k):0;
@@ -180,7 +179,7 @@ function ficha(){const V=VIEWS[view],k=V.k,d=M[sel],v=d[k][yi],o=d.occ[yi];const
   let h=`<div class="fname">${d.n}</div>${d.avant?'<span class="tag">Corredor del Avant</span>':''}`;
   if(v==null){h+=`<div class="nd">El INE no publica dato para este municipio en esta vista (menos de cinco trabajadores por destino).</div>`}
   else{const r=rankOf(sel,k,yi);const one=V.share&&o?Math.round(o/v):null;
-    h+=`<div class="kpis"><div class="kpi hot"><b>${fmt(v)}</b><span>${view==='inv'?'vecinos de la Comunidad de Madrid trabajan aquí':'vecinos trabajan en '+(view==='mad'?'Madrid capital':view==='cm'?'la Comunidad de Madrid':'la provincia de Toledo')}</span></div>
+    h+=`<div class="kpis"><div class="kpi hot"><b>${fmt(v)}</b><span>${view==='inv'?'vecinos de la Comunidad de Madrid trabajan aquí':'vecinos trabajan en '+(view==='mad'?'Madrid capital':'la Comunidad de Madrid')}</span></div>
     <div class="kpi"><b>${one?'1 de '+one:'nº '+r}</b><span>${one?'de sus ocupados':'en la provincia'}</span></div>
     ${one?`<div class="kpi"><b>nº ${r}</b><span>de la provincia en número</span></div>`:''}
     ${view!=='inv'&&d.inv[yi]!=null?`<div class="kpi"><b>${fmt(d.inv[yi])}</b><span>vecinos de la Comunidad de Madrid trabajan aquí</span></div>`:''}</div>`;
